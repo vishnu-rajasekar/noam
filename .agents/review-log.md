@@ -351,3 +351,157 @@ No baseline commit exists; this review made no commit or integration change.
 None. Gate 1 Phase A closure passes unconditionally. This reviewer record does
 not itself create the baseline commit or begin A5.1; those actions were outside
 the authorised review-only scope.
+
+## TASK-002 A5.1 — FAIL
+
+Reviewed the first A5.1 `ready_for_review` handoff
+`.agents/handoffs/TASK-002-a5-1-recorded-fixture-intake.json` at SHA-256
+`668a8bf8ad75ab4ab82f5d22d25f3e60abf5e7e15a39893d96a103ce6510c4e2`.
+Timestamp: 2026-09-01T09:34:34Z. Review execution used a fresh candidate copy
+at `/private/tmp/noam-a51-review.ecqF8L`, reconstructed from pinned base
+`21781d0b27a375948883e5a374be1582fe5544a7` plus the complete tracked and
+untracked candidate. No implementation file, branch, commit, or acceptance
+criterion was changed.
+
+### Isolation and candidate inventory
+
+- The durable task pins base `21781d0b27a375948883e5a374be1582fe5544a7`,
+  branch `agent/claude/task-002-a5-1-recorded-fixture-intake`, and worktree
+  `.worktrees/task-002-a5-1-recorded-fixture-intake`. The branch HEAD and
+  merge-base are exactly that base; primary `main` is separately at
+  `6db52d11d044dae11974b5a0ab148ab06086fab5` and was clean before this
+  append-only record.
+- The handoff is valid JSON, names Claude session `noam-claude-task-002`, and
+  has state `ready_for_review`. Its changed-file list exactly matches the
+  modified/untracked candidate: `scripts/verify.sh`,
+  `src/noam/proposals/**`, `tests/a5_1/**`, `tests/fixtures/a5_1/**`, and the
+  handoff itself. No changed implementation path is outside task ownership.
+- Ignored `__pycache__` files and implementer-local `.tools/` helpers exist in
+  the implementation worktree but are absent from the handoff and candidate
+  diff. No symlink, executable binary, secret, solver output, database, log,
+  or generated dependency is in the candidate inventory.
+
+### Acceptance criteria checked
+
+- fixture origin, authorship, CC0-1.0 permission, dates, byte lengths, source
+  locators, redistribution rationale, and independently recomputed SHA-256;
+- canonical ordering, compact whitespace, numeric representation, UTF-8 and
+  final-newline rules; checked-in output equality and byte stability in two
+  independent fresh processes;
+- sourced and inferred factual claims, proposed study fields, proposed
+  requirements and the proposed model hypothesis for citations, declared
+  sources, categories, confidence, identifiers and authority status;
+- all six structurally separate package sections, package/source provenance,
+  unknown-source rejection, unresolved reason codes, affected references and
+  human-action text;
+- nominal, missing, incompatible, unknown-fixture, source/output digest,
+  version and malformed-record paths, including additional malformed metadata
+  and provenance adversaries not present in the candidate suite;
+- fixture-root confinement, including roots named `studies/S001_airport_cw`
+  and `knowledge/restricted`, and a corpus symlink to the real S001 study
+  record;
+- prompt-injection text as inert untrusted source content, schema stability,
+  citation validity, unchanged proposed status and zero action attempts;
+- network/DNS/socket/subprocess denial, static client/import inspection,
+  content-minimised success/failure logs and raw-content-free exceptions;
+- proposal-only behaviour, no registry/model write imports, no authoring-state
+  mutation, baseline regression, scope inventory, and absence of live model,
+  acquisition, credential, Rhino/Grasshopper, standards, solver, RuleCard,
+  S001-content, numerical, physics, compliance or engineering work.
+
+### Independent commands and outcomes
+
+- `bash scripts/verify.sh --fast` — **exit 0**, 59/59 baseline tests passed.
+- `bash scripts/verify.sh --integration` — **exit 0**, 78/78 A5.1 tests
+  passed and the fixture regeneration check reported no drift.
+- `bash scripts/verify.sh --nonsense` — **exit 2** with the preserved loud
+  unknown-mode error.
+- Two separate fresh Python processes produced identical canonical nominal
+  bytes: 4,329 bytes, SHA-256
+  `31b461fbecc57e4e25ee837c500589105207de52d147c41f942f9c3226e332b7`,
+  request SHA-256
+  `17433b577668801d4ead60475fda9013d7a50923d254f96ef0e1a86661e8683e`.
+- All 38 handoff artefact paths exist and independently match their recorded
+  SHA-256. All seven source fixtures match adjacent byte-length/SHA metadata,
+  declare purpose-written synthetic origin and CC0-1.0, and total less than
+  8,000 bytes.
+- Static runtime inspection found no network/model client, endpoint, API key,
+  subprocess, live-model, Rhino, standards, solver or S001 implementation
+  import. Candidate tests deny connection/DNS/socket/subprocess primitives and
+  record zero attempted calls through every nominal and failure fixture path.
+- Independent adversaries returned: forbidden-named S001 root accepted
+  (`ok=True`); forbidden-named `knowledge/restricted` root accepted
+  (`ok=True`); symlink to the real S001 `study.yaml` accepted (`ok=True`);
+  tampered recorded `request_sha256` accepted (`ok=True`); malformed list
+  `source_id` escaped as uncaught `TypeError`; duplicate source id accepted
+  (`ok=True`, two provenance entries).
+
+### Architectural, privacy, and scientific review
+
+- The six content categories remain distinct, factual claims retain sourced or
+  inferred labels, citations resolve in the checked-in nominal packages, and
+  all checked-in confidence values are within `[0, 1]`. The only status values
+  are the required literal `proposed`; no approval, compliance, validation,
+  verification, decision, or engineering-authority field was found.
+- Prompt-injection content is inert in the checked-in injection case, does not
+  enter output/logs, cannot add a field, cannot change status, and triggers no
+  guarded external action.
+- The candidate is proposal-only and contains no authoring-state write or
+  engineering result. Its recorded backend demonstrates no model quality,
+  numerical/physics correctness, standards applicability, compliance, or
+  human approval.
+- These passing properties do not close the privacy boundary: arbitrary root
+  selection and symlink following allow the recorded-fixture reader to consume
+  material explicitly outside A5.1, including S001 or restricted content.
+
+### Blocking findings and bounded repair request
+
+1. **Critical — fixture roots and reads are not confined.**
+   `src/noam/proposals/backend.py:54-55` accepts any path; reads at
+   `backend.py:116`, `backend.py:135`, and `backend.py:144` neither require the
+   authorised A5.1 fixture tree nor reject symlinks/resolved-path escape. The
+   independent adversary accepted complete fixtures rooted under paths named
+   `studies/S001_airport_cw` and `knowledge/restricted`, then accepted a corpus
+   symlink to the real S001 `study.yaml`. Fail closed unless the canonicalised
+   root is the explicitly authorised fixture root; reject study and restricted
+   roots; require every metadata/source/output path to remain beneath its
+   declared fixture subdirectory after resolution; reject symlinks. Add direct
+   S001, `knowledge/restricted`, `..`, absolute/symlink-escape and nominal-root
+   tests without reading restricted content into logs or errors.
+
+2. **High — recorded request integrity is declared but not enforced.**
+   `backend.py:46` admits `request_sha256` in metadata, but `resolve()` at
+   `backend.py:67-87` never recomputes or compares it. Replacing the value with
+   64 `a` characters still produced a successful package. Recompute the
+   canonical request digest and reject any mismatch as a structured recorded-
+   fixture failure. Validate the adjacent recorded request bytes, their
+   canonical form and exact equality with the incoming request as part of the
+   fixture record rather than relying only on checked-in test metadata.
+
+3. **High — malformed fixture metadata can escape the structured failure
+   contract.** `backend.py:123-129` validates only the key set and one value
+   type. A list-valued `source_id` reaches the dictionary lookup at
+   `backend.py:169-170` and raises uncaught `TypeError`, contrary to Gate 2's
+   typed unresolved/fail-closed requirement. Introduce a strict typed metadata
+   contract for every field, including ids, filenames, SHA-256 values, byte
+   length, kind and versions; convert every parse/type/path/validation failure
+   to `ProposalError(MALFORMED_FIXTURE_RECORD, <content-free reference>)`; add
+   a type adversary for each metadata field and prove intake never raises.
+
+4. **High — source provenance identity is ambiguous and one proposed claim
+   lacks a stable identifier.** `contracts.py:194` permits duplicate source
+   ids, while `backend.py:169` silently collapses them; a duplicate was accepted
+   after updating the recorded digest. Enforce unique source ids and a complete
+   one-to-one match between package provenance and the source records the
+   backend actually verified; reject duplicate, additional and missing source
+   provenance. Separately, the present model-hypothesis proposal at
+   `contracts.py:146-153` has citations and confidence but no stable `claim_id`
+   or `ref` (the nominal proposed-id inventory is `PS-001..003`, `PR-001..002`,
+   then `None`). Add a strict stable identifier and test it alongside every
+   other proposed claim.
+
+Keep these repairs inside TASK-002 and its owned paths. Add the adversarial
+cases to `tests/a5_1`, regenerate only the affected recorded fixtures and
+digests, update the same durable handoff, and rerun both exact gates. Do not
+alter the acceptance criteria, commit, integrate, begin A5.2, use a live model,
+acquire resources, or touch S001/restricted/standards/Rhino/solver scope.
