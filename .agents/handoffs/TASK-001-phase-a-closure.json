@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "task_id": "TASK-001-phase-a-closure",
+  "state": "ready_for_review",
+  "repair_round": 3,
+  "repair_round_note": "Round 3 of the Phase A closure gate, explicitly authorised by the human checkpoint required after two unsuccessful repair rounds (IMPLEMENTER_REVIEWER_PROTOCOL.md). Acceptance criteria are unchanged. Round 2 (verdict FAIL, .agents/review-log.md 2026-09-01T08:31:51Z) raised four bounded, blocking findings. This handoff addresses exactly those four and nothing else: no acceptance criterion, tolerance, test, or contract was weakened; no S001 or engineering value was invented (studies/S001_airport_cw/brief.md and model/model-hypothesis.md remain blank unknown-only templates); A5.1 was not started; no commit, merge, or integration was performed.",
+  "base_commit": "unavailable (unborn main; bootstrap exception, see task brief)",
+  "branch": "main (primary bootstrap worktree; no isolated worktree per bootstrap exception)",
+  "worktree": ".",
+  "implementer": {
+    "agent": "Claude",
+    "session": "noam-claude-task-001-phase-a-closure"
+  },
+  "round_3_findings_addressed": [
+    {
+      "finding": "1 (High) -- interpreter selection violates the repair contract: scripts/lib/pick_python.sh accepted any executable .venv-noam/bin/python without the import probe, even when a later PATH candidate was valid.",
+      "resolution": "noam_pick_python now applies the same `import pydantic, yaml` probe to the declared environment: `if [[ -x \"$declared\" ]] && _noam_python_has_deps \"$declared\"`. A broken declared environment is skipped deterministically and selection continues to $NOAM_PYTHON then the fixed PATH candidate list; the all-candidates-unavailable path still prints the shared actionable multi-line error via noam_require_python and returns 1. The library header comment was updated to describe probing the declared environment (the round-2 comment claimed it was deliberately unprobed). New negative tests in tests/noam_core/test_interpreter_selection.py: test_broken_declared_environment_falls_through_to_path (broken .venv-noam + usable python3 on PATH -> python3 selected) and test_broken_declared_environment_and_no_usable_path_fails (broken .venv-noam + no usable PATH interpreter -> exit 1, actionable error mentioning pydantic). The existing test_declared_project_environment_wins (declared env has deps -> selected) still passes, so precedence of a *working* declared env is preserved."
+    },
+    {
+      "finding": "2 (High) -- the declared generated environment is not fully ignored: .gitignore had no .venv-noam/ rule, so pyvenv.cfg and lib/site-packages remained candidate files.",
+      "resolution": "Added a narrow `.venv-noam/` directory rule in .gitignore immediately after `.venv/`, with a comment noting the generic `bin/` rule only covered its bin/. The rule is placed well above the `.agents/` sentinel/negation block and shares no path prefix with it, so the three durable reviewer records (.agents/tasks/, .agents/handoffs/, .agents/review-log.md) remain re-included and the two ephemeral dotfiles remain ignored -- unchanged from round 2. NOTE: `git check-ignore -v` could NOT be run in this sandbox (git aborts because it cannot read /Users/apple/.gitconfig, which is outside the sandbox's allowed read scope, and HOME/GIT_CONFIG_GLOBAL overrides for git are blocked by the non-interactive permission policy; this matches the recorded round-2 limitation). The reviewer must confirm outside the sandbox that a representative .venv-noam/ root path, .venv-noam/pyvenv.cfg, a .venv-noam/lib/.../site-packages file, and .venv-noam/bin/python are all ignored, while .agents/tasks/TASK-001-phase-a-closure.md, .agents/handoffs/TASK-001-phase-a-closure.json, and .agents/review-log.md are NOT ignored and .agents/.last-review-hash / .agents/.review-round-count ARE."
+    },
+    {
+      "finding": "3 (High) -- domain-scoped references can cross domains silently: src/noam/registry/validate.py checked only global id existence, so a Maxwell Study/Experiment/Result could reference a Joule Capability and a Maxwell Study a Joule Precedent while validation reported success.",
+      "resolution": "Global id uniqueness and the domain-directory containment check (_check_domain_matches_dir) are retained unchanged. Added: capability_domain / precedent_domain maps (id -> declared domain string) built from the same loaded records; a helper _check_reference_domain(ref_id, ref_domain, study_domain, where, kind) that returns a problem when the target domain differs from the containing study's domain (a target with no declared domain is also reported as a mismatch, but Capability/Precedent both require `domain`). Wired into: study.capability_ids, study.precedent_ids, experiment.capability_ids, and result.capability_id -- each only after the id is confirmed to exist. For result.capability_id the check runs before the existing 'capability not among its experiment's capability_ids' check and short-circuits it (a cross-domain reference is the more fundamental fault). Negative tests added to tests/noam_core/test_registry.py: test_detects_study_capability_reference_crossing_domain, test_detects_study_precedent_reference_crossing_domain, test_detects_experiment_capability_reference_crossing_domain, test_detects_result_capability_reference_crossing_domain (all Maxwell study -> Joule target). Same-domain passing fixture: test_same_domain_capability_and_precedent_references_are_valid (Maxwell study wired to a Maxwell capability + Maxwell precedent through experiment and result -> report.ok). Real studies/S001_airport_cw (Maxwell, no capabilities/precedents) still validates with no problems."
+    },
+    {
+      "finding": "4 (High) -- malformed authoring YAML escapes structured validation: _load_all and the study.yaml load caught only pydantic ValidationError, so a PyYAML parse failure propagated through cmd_registry_validate as a traceback.",
+      "resolution": "validate.py now imports `yaml` and both load sites catch `(ValidationError, yaml.YAMLError)`, appending a path-specific problem string and continuing the scan over the remaining files. yaml.YAMLError is the base class of PyYAML's ScannerError/ParserError, so flow/scanner faults are covered. cmd_registry_validate already returns 1 (non-zero, no traceback) whenever report.problems is non-empty, so the CLI contract is satisfied without further change. Tests added to tests/noam_core/test_registry.py: test_malformed_study_yaml_is_reported_not_raised (broken study.yaml -> validate_registry() returns a report, does not raise, problem names study.yaml) and test_malformed_child_yaml_is_reported_and_scan_continues (broken requirements/REQ-001.yaml plus a separately-broken insight -> both problems reported, proving the scan continued past the parse failure)."
+    }
+  ],
+  "changed_files": [
+    "scripts/lib/pick_python.sh",
+    "src/noam/registry/validate.py",
+    "tests/noam_core/test_registry.py",
+    "tests/noam_core/test_interpreter_selection.py",
+    ".gitignore",
+    ".agents/handoffs/TASK-001-phase-a-closure.json",
+    "scripts/verify.sh",
+    "scripts/noam.sh",
+    "ARCHITECTURE.md",
+    "src/noam/models/experiment.py",
+    "src/noam/models/result.py",
+    "src/noam/registry/store.py",
+    "src/noam/cli/main.py",
+    "tests/noam_core/test_models.py",
+    "ROADMAP.md",
+    ".agents/tasks/TASK-001-phase-a-closure.md"
+  ],
+  "changed_files_note": "First 6 entries were modified in this round-3 repair. The remaining entries were last modified in round 1 or round 2 and are unchanged in round 3; they are listed only because the base is unborn `main`, so the candidate diff is the full set of task-touched files.",
+  "verification": [
+    {
+      "command": "bash scripts/verify.sh --fast",
+      "exit_code": 0,
+      "summary": "unittest reports OK, 'Ran 59 tests'. Interpreter auto-selected by the shared pick_python.sh as the conda base python (`python3` on this machine lacks pydantic/PyYAML; the conda base interpreter has them). 50 pre-existing + 9 new this round (2 in test_interpreter_selection: broken-declared-env fall-through and broken-declared-env failure; 7 in test_registry: 4 cross-domain reference negatives, 1 same-domain passing fixture, 2 malformed-YAML).",
+      "evidence_path": null
+    },
+    {
+      "command": "bash scripts/noam.sh registry validate",
+      "exit_code": 0,
+      "summary": "'registry valid: no problems found' against the real studies/S001_airport_cw on disk. The new cross-domain and malformed-YAML paths do not fire for S001 (Maxwell study, no capabilities/precedents, all authoring YAML well-formed).",
+      "evidence_path": null
+    },
+    {
+      "command": "git check-ignore -v (.venv-noam paths; the three durable .agents paths; the two .agents dotfiles)",
+      "exit_code": null,
+      "summary": "NOT RUN -- git is unusable in this sandbox (cannot read /Users/apple/.gitconfig; HOME/GIT_CONFIG_GLOBAL overrides blocked by the non-interactive permission policy). Same limitation recorded in round 2. Reviewer must run this outside the sandbox to confirm findings 2's fix and the unchanged .agents re-inclusion.",
+      "evidence_path": null
+    }
+  ],
+  "artifacts": [],
+  "assumptions": [
+    "conda base python (pydantic 2.x, PyYAML 6.x) remains an acceptable offline interpreter for scripts/verify.sh --fast until uv / network access allow `uv sync`. Existing Phase A decision, re-verified; the round-3 pick_python.sh change only adds a probe to the declared-.venv-noam branch and does not alter which interpreter this machine selects.",
+    "yaml.YAMLError is the correct base class to catch for all PyYAML parse failures raised by yaml.safe_load in noam.utils.yaml_io.load_yaml (ScannerError, ParserError, ComposerError, ConstructorError all subclass it).",
+    "A domain-scoped reference whose target record declares no `domain` at all should be treated as a mismatch; in practice Capability and Precedent both make `domain` mandatory, so this branch is defensive only.",
+    "The two ephemeral .agents dotfiles remain the only non-durable files under .agents/; tasks/, handoffs/, review-log.md stay tracked (unchanged from round 2)."
+  ],
+  "limitations": [
+    "`git check-ignore` could not be executed here. Finding 2's fix is reasoned against gitignore(5): `.venv-noam/` is an early, self-contained directory rule that shares no path prefix with the later `.agents/` sentinel/negation block, so it cannot affect the durable-record re-inclusion, and it ignores the whole generated tree (root, pyvenv.cfg, lib/site-packages, bin/). Independent confirmation outside the sandbox is required before integration.",
+    "The external Stop-hook (~/.claude/scripts/codex-review.sh) still enforces its own MAX_ROUNDS=2 and still re-appends a bare `.agents/` line if the literal string `.agents/` is absent from .gitignore. The sentinel line is unchanged and still exactly `.agents/`, so the hook's `grep -qx '.agents/'` should still match and not append a duplicate. If a second un-negated bare `.agents/` line ever appears at end-of-file it must be removed before any commit, because as the last-matching pattern it would re-ignore the durable records.",
+    "Cross-domain enforcement compares the target's declared domain against the containing Study's `domain`. A future multi-domain study (none exists) would need this relaxed to a set membership check; that is out of scope for this gate.",
+    "Study.capability_ids / precedent_ids are validated for existence and domain, not for 'the study actually exercises this capability'. Unchanged from round 2; out of scope.",
+    "No live `codex` review has been obtained for this handoff; it is submitted for that independent review, not a record of one already passed."
+  ],
+  "unresolved_risks": [
+    "If the Stop-hook appends a second, un-negated bare `.agents/` line at end-of-file, that trailing line would re-ignore the whole directory as the last matching pattern. The reviewer/integrator should inspect the tail of .gitignore immediately before creating the baseline commit.",
+    "pick_python.sh's candidate list is fixed; a site whose only usable interpreter is named outside that list and outside .venv-noam / $NOAM_PYTHON still fails loudly. That is the intended failure mode; $NOAM_PYTHON is the supported escape hatch and should be documented in README.md in a later docs pass.",
+    "The malformed-YAML handling reports the raw PyYAML exception text in the problem string. It is path-prefixed and single-record-scoped, but a very large malformed file would produce a long message; acceptable for a local hand-edited registry."
+  ],
+  "notes_for_reviewer": "Please verify independently outside this sandbox: (1) `bash scripts/verify.sh --fast` exits 0 with 59 passing tests from a clean process; (2) `bash scripts/noam.sh registry validate` exits 0 against the real studies/S001_airport_cw; (3) `git check-ignore -v` shows the .venv-noam root / pyvenv.cfg / lib-site-packages / bin paths are ignored AND the three durable .agents paths are still NOT ignored while the two .agents dotfiles ARE; (4) each of the four round-2 findings is closed without weakening any test or acceptance criterion and without any invented S001 or engineering value (brief.md / model-hypothesis.md remain blank unknown-only templates); (5) A5.1 was not started and no commit/integration was performed. This is an authorised third repair round; the two-round cap was lifted for this session by explicit human checkpoint with acceptance criteria unchanged."
+}

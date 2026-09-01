@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "task_id": "TASK-NNN",
+  "state": "ready_for_review",
+  "base_commit": "full Git SHA",
+  "branch": "agent/claude/task-NNN-short-name",
+  "worktree": ".worktrees/task-NNN-short-name",
+  "implementer": {
+    "agent": "Claude",
+    "session": "noam-claude-task-NNN"
+  },
+  "changed_files": [],
+  "verification": [
+    {
+      "command": "scripts/verify.sh --fast",
+      "exit_code": null,
+      "summary": "",
+      "evidence_path": null
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "",
+      "sha256": ""
+    }
+  ],
+  "assumptions": [],
+  "limitations": [],
+  "unresolved_risks": [],
+  "notes_for_reviewer": ""
+}

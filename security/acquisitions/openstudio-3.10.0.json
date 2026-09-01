@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-08-09T15:16:03+01:00",
+  "purpose": "Candidate Joule compatibility profile for LBT 1.10 and EnergyPlus 25.1",
+  "publisher": "National Laboratory of the Rockies OpenStudio project",
+  "release": {
+    "repository": "https://github.com/NatLabRockies/OpenStudio",
+    "tag": "v3.10.0",
+    "commit": "86d7e215a1",
+    "published_at": "2025-06-18T20:47:27Z",
+    "platform": "Darwin x86_64"
+  },
+  "checksum_manifest": {
+    "name": "sha256sums.txt",
+    "url": "https://github.com/NatLabRockies/OpenStudio/releases/download/v3.10.0/sha256sums.txt",
+    "publisher_asset_sha256": "f670b9bfe2b98113701722cd94a1947f050314008cffc46fca65dce539dfb8c2",
+    "observed_sha256": "f670b9bfe2b98113701722cd94a1947f050314008cffc46fca65dce539dfb8c2",
+    "declared_dmg_sha256": "a2d176d6efe848fc46f1b8306e6f80340d0464fed4ddbce245a0e6dcc0898a89"
+  },
+  "asset": {
+    "name": "OpenStudio-3.10.0+86d7e215a1-Darwin-x86_64.dmg",
+    "url": "https://github.com/NatLabRockies/OpenStudio/releases/download/v3.10.0/OpenStudio-3.10.0%2B86d7e215a1-Darwin-x86_64.dmg",
+    "publisher_api_sha256": "a2d176d6efe848fc46f1b8306e6f80340d0464fed4ddbce245a0e6dcc0898a89",
+    "observed_sha256": "a2d176d6efe848fc46f1b8306e6f80340d0464fed4ddbce245a0e6dcc0898a89",
+    "size_bytes": 216361930,
+    "disk_image_verification": "passed: hdiutil checksum valid",
+    "mount_mode": "read-only temporary mount; detached after inspection",
+    "installer": {
+      "name": "OpenStudio-3.10.0+86d7e215a1-Darwin-x86_64.app",
+      "execution": "not executed",
+      "signature_verification": "failed: code object is not signed at all",
+      "gatekeeper_assessment": "failed: internal error in Code Signing subsystem",
+      "payload": "203061607-byte installer.dat; not executed or extracted"
+    }
+  },
+  "tar_distribution": {
+    "name": "OpenStudio-3.10.0+86d7e215a1-Darwin-x86_64.tar.gz",
+    "url": "https://github.com/NatLabRockies/OpenStudio/releases/download/v3.10.0/OpenStudio-3.10.0%2B86d7e215a1-Darwin-x86_64.tar.gz",
+    "publisher_api_sha256": "0e506cc23daafec26844c841218eabec77376f8d43c911899cf3212f902c178c",
+    "checksum_manifest_sha256": "0e506cc23daafec26844c841218eabec77376f8d43c911899cf3212f902c178c",
+    "observed_sha256": "0e506cc23daafec26844c841218eabec77376f8d43c911899cf3212f902c178c",
+    "size_bytes": 305049389,
+    "archive_entries": 12104,
+    "archive_uncompressed_bytes": 932027392,
+    "unsafe_paths": 0,
+    "unsafe_special_entries": 0,
+    "symlink_or_hardlink_entries": 2,
+    "inspection": "Only the EnergyPlus directory was extracted into quarantine; no executable was run.",
+    "energyplus_25_1": {
+      "binary_sha256": "0598c630583fb482f1411e238ade8c4941583469fe101ea676cd0b154d504fb3",
+      "signature_verification": "failed: invalid signature (code or signature have been modified)",
+      "gatekeeper_assessment": "failed: internal error in Code Signing subsystem",
+      "execution": "accepted for sandboxed exploratory execution; execution evidence is recorded per experiment"
+    }
+  },
+  "decision": {
+    "status": "accepted_sandboxed_exploratory",
+    "accepted_at": "2026-08-09T15:16:03+01:00",
+    "accepted_by": "human engineer (explicit user decision)",
+    "scope": "Local Task 0 exploratory simulation only; no production, compliance, release, or external service use.",
+    "reason": "The human engineer explicitly accepted the residual supply-chain risk after publisher digests, disk/archive integrity, provenance, and path-safety checks passed, while the official installer remained unsigned and the EnergyPlus 25.1 binary failed native signature verification.",
+    "allowed_actions": [
+      "documentation",
+      "non-executing adapter scaffolding",
+      "deterministic fixture tests",
+      "execute the exact hash-bound tar runtime inside the project sandbox for Task 0",
+      "preserve raw logs and provenance from sandboxed exploratory runs"
+    ],
+    "prohibited_actions": [
+      "launch installer",
+      "bypass Gatekeeper",
+      "represent profile as signed, supported, production-ready, or compliance-capable",
+      "execute a runtime whose digest differs from this record",
+      "permit runtime network access",
+      "use project/user content for training or send it outside the sandbox"
+    ],
+    "controls": {
+      "runtime_source": "publisher-hash-matched tar distribution only",
+      "runtime_location": ".tools/openstudio-3.10.0",
+      "runtime_mutability": "read-only after extraction",
+      "network": "denied",
+      "filesystem": "project-scoped; runtime directory denied write access to implementer",
+      "evidence": "record engine profile, executable digest, inputs, units, raw stdout/stderr, outputs, diagnostics, and limitations",
+      "promotion": "requires all JOULE_ENGINE_PROFILES.md promotion gates; this acceptance is not promotion"
+    },
+    "clearance_options": [
+      "publisher-signed and notarized distribution",
+      "reproducible build from verified source with audited build dependencies"
+    ]
+  }
+}

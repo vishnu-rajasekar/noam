@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-08-09T13:45:00+01:00",
+  "purpose": "Noam Task 0 local Honeybee-to-EnergyPlus feasibility spike",
+  "publisher": "U.S. Department of Energy EnergyPlus project",
+  "release": {
+    "repository": "https://github.com/NatLabRockies/EnergyPlus",
+    "tag": "v26.1.0",
+    "commit": "6f2e40d102",
+    "platform": "Darwin macOS 12.1 x86_64"
+  },
+  "assets": [
+    {
+      "name": "EnergyPlus-26.1.0-6f2e40d102-Darwin-macOS12.1-x86_64.tar.gz",
+      "url": "https://github.com/NatLabRockies/EnergyPlus/releases/download/v26.1.0/EnergyPlus-26.1.0-6f2e40d102-Darwin-macOS12.1-x86_64.tar.gz",
+      "publisher_sha256": "60d634dd1936f69bb9553dd85469f3c2af51d68b03d85434ada559e984a464cd",
+      "observed_sha256": "60d634dd1936f69bb9553dd85469f3c2af51d68b03d85434ada559e984a464cd",
+      "size_bytes": 215918153,
+      "archive_entries": 7738,
+      "archive_uncompressed_bytes": 806286848,
+      "unsafe_paths": 0,
+      "unsafe_special_entries": 0,
+      "symlink_or_hardlink_entries": 10,
+      "energyplus_binary_sha256": "4cfd992f3b134d2d63ae7c717d3f33303e60a5ea1ffcbc1080d2c55eadc66ea1",
+      "signature_verification": "failed: invalid signature (code or signature have been modified)"
+    },
+    {
+      "name": "EnergyPlus-26.1.0-6f2e40d102-Darwin-macOS12.1-x86_64.dmg",
+      "url": "https://github.com/NatLabRockies/EnergyPlus/releases/download/v26.1.0/EnergyPlus-26.1.0-6f2e40d102-Darwin-macOS12.1-x86_64.dmg",
+      "publisher_sha256": "208ada525783f7be703e48e8478cc01ef13b4e569e805d657c81fb4c76935ca6",
+      "observed_sha256": "208ada525783f7be703e48e8478cc01ef13b4e569e805d657c81fb4c76935ca6",
+      "size_bytes": 168271667,
+      "disk_image_verification": "passed: hdiutil checksum valid",
+      "mount_mode": "read-only temporary mount; detached after inspection",
+      "installer_signature_verification": "failed: invalid signature (code or signature have been modified)"
+    }
+  ],
+  "execution_history": [
+    {
+      "action": "energyplus --version",
+      "timing": "before signature failure was discovered",
+      "result": "EnergyPlus, Version 26.1.0-6f2e40d102"
+    },
+    {
+      "action": "EnergyPlus annual simulation invoked by the Task 0 implementer",
+      "timing": "2026-08-09T13:59:30Z after this profile was blocked",
+      "result": "protocol violation; run completed with warnings but evidence was rejected",
+      "evidence": "spike/task0_energy/_evidence/run_20260809T135930Z/",
+      "remediation": "Codex issued a stop-and-repair instruction; Task 0 must use the separately accepted hash-bound EnergyPlus 25.1 runtime and disclose this event in its handoff. This event does not change the blocked decision."
+    }
+  ],
+  "decision": {
+    "status": "blocked",
+    "reason": "Publisher digests and archive integrity pass, but both official macOS distribution paths fail native code-signature verification.",
+    "prohibited_actions": [
+      "execute EnergyPlus simulations",
+      "bypass Gatekeeper",
+      "remove security attributes",
+      "ad-hoc re-sign binaries",
+      "silently substitute another build"
+    ],
+    "clearance_requirement": "A valid publisher-signed build or an independently verified publisher explanation and explicit human risk acceptance."
+  }
+}

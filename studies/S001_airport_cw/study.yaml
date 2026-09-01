@@ -1,0 +1,26 @@
+id: S001
+title: Airport Unitised Curtain Wall Structural Design
+domain: maxwell
+project_stage: '2'
+status: draft
+confidentiality: restricted
+engineering_question: What structural idealisation and preliminary sizing strategy
+  is appropriate for the unitised curtain-wall frame (mullions, transoms, strongbacks),
+  and when does isolated-member analysis need to escalate to global frame or local
+  FEM?
+decision_required: Develop a defensible preliminary structural design and modelling
+  strategy for the unitised curtain-wall frame while establishing the first reusable
+  Maxwell capabilities.
+description: ''
+jurisdiction: unknown
+system_type: ''
+tags: []
+created_at: '2026-08-31T23:13:18.706371Z'
+updated_at: '2026-08-31T23:13:18.706686Z'
+requirement_ids: []
+model_hypothesis_ids: []
+capability_ids: []
+experiment_ids: []
+insight_ids: []
+precedent_ids: []
+evidence_ids: []

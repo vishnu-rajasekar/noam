@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "defaultMode": "dontAsk",
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write"
+    ],
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Agent",
+      "mcp__*",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(sftp *)",
+      "Bash(nc *)",
+      "Bash(ncat *)",
+      "Bash(socat *)",
+      "Bash(open *)",
+      "Bash(osascript *)",
+      "Bash(mail *)",
+      "Bash(gh *)",
+      "Bash(brew *)",
+      "Bash(*pip install*)",
+      "Bash(*pip uninstall*)",
+      "Bash(claude *)",
+      "Bash(codex *)",
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "Bash(git tag *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)",
+      "Bash(git restore *)",
+      "Bash(git checkout -- *)",
+      "Bash(rm *)",
+      "Bash(rmdir *)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false,
+    "excludedCommands": [],
+    "filesystem": {
+      "denyRead": [
+        "~/"
+      ],
+      "allowRead": [
+        ".",
+        "~/.claude/scripts/codex-review.sh"
+      ],
+      "denyWrite": [
+        "./.git",
+        "./.tools",
+        "./.venv",
+        "~/.claude",
+        "~/.config",
+        "/Applications",
+        "/Library",
+        "/usr/local"
+      ]
+    },
+    "network": {
+      "allowedDomains": [],
+      "deniedDomains": [
+        "*"
+      ],
+      "allowUnixSockets": [],
+      "allowLocalBinding": false
+    }
+  }
+}

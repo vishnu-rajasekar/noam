@@ -1,0 +1,52 @@
+.DS_Store
+.env
+.venv/
+# Declared fallback interpreter environment used by scripts/lib/pick_python.sh
+# before `uv sync` is available. Generated dependency tree -- never tracked.
+# (The generic `bin/` rule below only hides its bin/; pyvenv.cfg and
+# lib/site-packages need this explicit rule -- Phase A closure repair round 3.)
+.venv-noam/
+.tools/
+.worktrees/
+.ladybug_home/
+__pycache__/
+.pytest_cache/
+pytest-of-*/
+.ruff_cache/
+.mypy_cache/
+artifacts/
+**/_evidence/
+dist/
+build/
+*.egg-info/
+*.user
+*.suo
+bin/
+obj/
+
+# --- .agents/ coordination records ------------------------------------------
+# GIT_MULTI_AGENT_WORKFLOW.md makes .agents/tasks/, .agents/handoffs/, and
+# .agents/review-log.md the DURABLE coordination system of record between
+# Claude (implementer) and Codex (reviewer). They must stay tracked.
+#
+# The Stop-hook ~/.claude/scripts/codex-review.sh (outside this repo) appends
+# a bare `.agents/` line on every run and checks for its literal presence
+# with `grep -qx '.agents/'`. Rather than let that hide the durable records,
+# we keep the sentinel line the hook wants and immediately re-include
+# everything durable beneath it. Order matters: a parent directory has to be
+# re-included before its children, and the final two lines re-ignore only the
+# ephemeral review-bookkeeping dotfiles the hook itself regenerates.
+.agents/
+!.agents/
+!.agents/tasks/
+!.agents/handoffs/
+!.agents/review-log.md
+.agents/.last-review-hash
+.agents/.review-round-count
+
+# Confidentiality boundary (see ARCHITECTURE.md / AGENTS.md): confidential or
+# licensed project material only ever lives under knowledge/restricted/ and is
+# never committed. registry/*.db is a disposable, rebuildable index (see
+# src/noam/registry/index.py), not authoring content.
+knowledge/restricted/
+registry/*.db
