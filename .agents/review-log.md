@@ -351,3 +351,7 @@ No baseline commit exists; this review made no commit or integration change.
 None. Gate 1 Phase A closure passes unconditionally. This reviewer record does
 not itself create the baseline commit or begin A5.1; those actions were outside
 the authorised review-only scope.
+
+## 2026-09-01T10:26:44Z -- codex exec failed (exit 1), skipping
+
+## 2026-09-01T10:32:23Z -- codex exec failed (exit 1), skipping

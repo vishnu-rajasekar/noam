@@ -1,0 +1,3 @@
+Meeting stub (synthetic): the facade scope is confirmed as unitised.
+Every other point in this note is explicitly marked "to be confirmed later".
+This document is purpose-written synthetic test material with no real project data.

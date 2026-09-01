@@ -1,0 +1,9 @@
+Project note: Fictional Terminal Link canopy screen (synthetic sample).
+The screen is a rectangular aluminium-framed glazed panel array.
+Nominal panel width is 1.5 m and nominal panel height is 3.0 m.
+The design brief asks for a preliminary mullion sizing strategy.
+Wind exposure is described only as "coastal, exact code to be confirmed".
+The deflection limit quoted by the architect is span over 175.
+No fire, seismic, or blast requirement is mentioned in this note.
+The client reference and the site address are intentionally omitted here.
+This document is purpose-written synthetic test material with no real project data.

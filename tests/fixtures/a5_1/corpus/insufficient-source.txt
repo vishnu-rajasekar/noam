@@ -1,0 +1,2 @@
+Fragment (synthetic): "...the panel..." and then the rest of the document is missing.
+This document is purpose-written synthetic test material with no real project data.
