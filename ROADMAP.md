@@ -76,6 +76,14 @@ approval.
 
 No A5.2 or later sub-task is defined or authorised yet.
 
+**Independent Standards Scout Lab spike — Class C decision (2026-09-01):**
+the human authorised TASK-004 as an isolated, offline experimental harness
+ahead of Phase C. This decision permits custody and bounded repair of the
+existing `tools/standards_scout/` and `tests/standards_scout/` skeleton only.
+It does not amend A5.1, define A5.2, or authorise live Ollama/model calls,
+licensed standards, confidential/S001 content, embeddings, RuleCard promotion,
+or integration with Noam's registry or authoritative architecture.
+
 ## Phase B — S001 Maxwell vertical slice
 
 Use the Airport CW study to establish the first real Maxwell capabilities:
