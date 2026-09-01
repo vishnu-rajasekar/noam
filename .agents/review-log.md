@@ -505,3 +505,27 @@ cases to `tests/a5_1`, regenerate only the affected recorded fixtures and
 digests, update the same durable handoff, and rerun both exact gates. Do not
 alter the acceptance criteria, commit, integrate, begin A5.2, use a live model,
 acquire resources, or touch S001/restricted/standards/Rhino/solver scope.
+
+## TASK-002 A5.1 repair round 2 — PASS
+
+Independent Codex review, 2026-09-01. Candidate branch
+`agent/claude/task-002-a5-1-recorded-fixture-intake`, isolated worktree
+`.worktrees/task-002-a5-1-recorded-fixture-intake`, candidate `3149226`,
+pinned to reviewed Phase A baseline `21781d0`.
+
+Acceptance evidence: candidate `scripts/verify.sh --fast` and
+`scripts/verify.sh --integration` pass (103 integration tests; fixture
+byte-stability check passes). The implementation and adversarial tests verify
+synthetic CC0 provenance/licence/SHA-256, canonical byte stability, proposed
+status and confidence/source citations, structural separation of sourced,
+inferred and missing information, backend/fixture/request/input digests and
+prompt-template provenance, structured unresolved failures, network denial,
+fixture-root confinement (including S001, knowledge/restricted, traversal,
+absolute and symlink escape), untrusted prompt-injection content, authority
+exclusion, and identifier/digest-only logging. Original core tests remain
+passing; no live model, acquisition, Rhino, standards, solver or S001 work is
+present. Direct probe also resolved the nominal fixture and rejected the
+S001, restricted and arbitrary roots with content-free `ProposalError`s.
+
+Verdict: unconditional PASS. No implementation files were edited and no
+commit, merge or push was performed by the reviewer.
