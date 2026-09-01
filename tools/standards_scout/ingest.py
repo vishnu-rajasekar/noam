@@ -18,9 +18,24 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from ._loaders import load_structured
-from .interfaces import UNKNOWN_CLAUSE, Chunk, DocumentMeta, sha256_file
+from .interfaces import UNKNOWN_CLAUSE, Chunk, DocumentMeta, sha256_bytes, sha256_file
 
 TEXT_SUFFIXES = {".txt", ".md", ".text"}
+
+
+def source_sha256(path: Path) -> str:
+    """Provenance hash of a source document.
+
+    Text sources (``.txt`` / ``.md``) are hashed after newline normalisation
+    (``\\r\\n`` and lone ``\\r`` -> ``\\n``) so the value is a stable identity of
+    the *content* regardless of the platform / git ``core.autocrlf`` that wrote
+    the working copy. Binary sources (e.g. PDF) are hashed byte-exact.
+    """
+
+    if path.suffix.lower() in TEXT_SUFFIXES:
+        raw = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        return sha256_bytes(raw)
+    return sha256_file(path)
 
 # A clause heading is a number (optionally an annex-style prefix of up to 3
 # letters, kept in the clause) followed by a short Title-style phrase:
@@ -164,7 +179,7 @@ def ingest_library(
         src = docs_dir / meta.source_file
         if not src.exists():
             raise FileNotFoundError(f"{meta.document_id}: source file missing: {src}")
-        actual = sha256_file(src)
+        actual = source_sha256(src)
         if actual != meta.sha256:
             raise ValueError(
                 f"{meta.document_id}: sha256 mismatch (metadata {meta.sha256[:12]}..., "
@@ -178,12 +193,12 @@ def ingest_library(
 
 def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Standards Scout ingestion helper")
-    ap.add_argument("--hash", type=Path, help="print sha256 of a file and exit")
+    ap.add_argument("--hash", type=Path, help="print the provenance sha256 of a file and exit")
     ap.add_argument("--docs", type=Path, help="documents directory")
-    ap.add_argument("--metadata", type=Path, help="documents.yaml")
+    ap.add_argument("--metadata", type=Path, help="documents.yaml / .json")
     args = ap.parse_args(argv)
     if args.hash:
-        print(sha256_file(args.hash))
+        print(source_sha256(args.hash))
         return 0
     if args.docs and args.metadata:
         chunks, metas, limitations = ingest_library(args.docs, args.metadata)

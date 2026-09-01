@@ -30,7 +30,11 @@
             ]
           },
           "source_file": { "type": "string", "minLength": 1 },
-          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "Provenance hash. For .txt/.md sources: SHA-256 of the newline-normalised (CRLF/CR -> LF) UTF-8 content. For binary sources (e.g. PDF): SHA-256 of the exact bytes. Produced by tools.standards_scout.ingest.source_sha256."
+          },
           "applicable_to": {
             "type": "array",
             "items": { "type": "string" },

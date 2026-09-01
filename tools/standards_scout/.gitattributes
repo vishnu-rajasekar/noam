@@ -1,0 +1,9 @@
+# The synthetic corpus is provenance-checked by SHA-256. Pin these files to LF
+# in the working tree on every platform so the hash in fixtures/synthetic/
+# documents.json stays reproducible regardless of core.autocrlf.
+# ingest.source_sha256() also normalises newlines for .txt/.md, so a stray CRLF
+# checkout still verifies; this attribute keeps the committed bytes stable too.
+fixtures/synthetic/documents/*.txt text eol=lf
+fixtures/synthetic/*.json           text eol=lf
+prompts/*.md                        text eol=lf
+schemas/*.json                      text eol=lf

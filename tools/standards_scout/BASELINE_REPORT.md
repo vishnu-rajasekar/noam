@@ -31,6 +31,18 @@ This corresponds to the task's "Completion report" (16 items).
   `scripts/verify.sh --fast` still cannot run in this environment (no
   pydantic+PyYAML interpreter) and these files are outside its scope.
 
+### Post-sync regression (CRLF) — fixed
+
+After the skeleton was committed (`b0326ea "WIP: work laptop progress before
+syncing"`) and the tree re-checked out on a machine with `core.autocrlf=true`,
+the synthetic `documents/*.txt` fixtures were rewritten with CRLF endings, which
+changed their byte-exact SHA-256 and made `ingest_library` fail its provenance
+check (6 test errors). Fixed: `ingest.source_sha256()` now hashes `.txt`/`.md`
+sources after newline normalisation (`\r\n`, `\r` -> `\n`) — a content identity
+that is platform-independent — while binary sources (PDF) stay byte-exact.
+Added `tools/standards_scout/.gitattributes` pinning the fixtures / prompts /
+schemas to `eol=lf` so the committed bytes also stay stable. 48/48 pass again.
+
 ---
 
 ## 1. Detected Qwen installation / provider / model
