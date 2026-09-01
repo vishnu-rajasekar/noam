@@ -42,6 +42,35 @@ sources after newline normalisation (`\r\n`, `\r` -> `\n`) — a content identit
 that is platform-independent — while binary sources (PDF) stay byte-exact.
 Added `tools/standards_scout/.gitattributes` pinning the fixtures / prompts /
 schemas to `eol=lf` so the committed bytes also stay stable. 48/48 pass again.
+Landed at `44b8c02`.
+
+### Codex re-review round 2: FAIL — schema enforcement gap, fixed
+
+Confirmed PASS: output confinement, malformed-response crash. New blocking
+finding: `_check_schema()` was a hand-written, partial re-implementation of
+`schemas/scout_response.schema.json` and had drifted from it — it missed
+`minLength`, `minimum`, required keys on `conflicts` entries, and
+`additionalProperties: false`. Repro that exposed it:
+`{'question_id': '', 'status': 'ANSWERED', 'verification_procedure': [{'step':
+0, ...}], 'conflicts': [{}], ...}` validated as `{'ok': True, 'findings': []}`.
+
+Fixed structurally rather than patched: `_jsonschema_lite.py` is a small (~120
+line), dependency-free validator for exactly the draft-07 subset the committed
+schemas use (`type`, `enum`, `required`, `properties`,
+`additionalProperties`, `items`, `minLength`/`maxLength`, `minimum`/`maximum`,
+`minItems`) and raises `NotImplementedError` if a schema ever uses a keyword
+outside that subset — loud, not silent. `validate._check_schema()` now
+validates `resp` directly against the loaded
+`schemas/scout_response.schema.json` instead of a hand-maintained copy of its
+rules, so the two cannot drift again. The reviewer's exact repro now returns
+4 `SCHEMA_INVALID` findings (empty `question_id`, `step: 0`, `conflicts[0]`
+missing both required keys) and `ok: False`.
+
+Added: `tests/standards_scout/test_jsonschema_lite.py` (14 tests on the
+generic validator) and 10 more cases in `TestMalformedResponsesNeverRaise`
+(empty `question_id`/`claim_id`/`claim`, `step` 0 and negative, `conflicts`
+missing required keys, empty `description`, unknown top-level and nested
+properties, plus the reviewer's exact combined repro). **72/72 tests pass.**
 
 ---
 
@@ -70,9 +99,9 @@ runner is not Ollama-specific beyond the OpenAI-compatible request shape.
 ```
 tools/__init__.py
 tools/standards_scout/
-  __init__.py  README.md  BASELINE_REPORT.md
-  interfaces.py  _loaders.py  ingest.py  retrieve.py  qwen_runner.py
-  validate.py  evaluate.py  report.py  run.py
+  __init__.py  README.md  BASELINE_REPORT.md  .gitattributes
+  interfaces.py  _loaders.py  _jsonschema_lite.py  ingest.py  retrieve.py
+  qwen_runner.py  validate.py  evaluate.py  report.py  run.py
   prompts/system_prompt_v1.md
   schemas/scout_response.schema.json
   schemas/document_metadata.schema.json
@@ -89,6 +118,8 @@ tests/standards_scout/test_retrieve.py
 tests/standards_scout/test_validate.py
 tests/standards_scout/test_evaluate.py
 tests/standards_scout/test_restricted_isolation.py
+tests/standards_scout/test_run_confinement.py
+tests/standards_scout/test_jsonschema_lite.py
 ```
 
 Files modified: none outside the list above. `src/noam/**`, `studies/**`,
@@ -164,9 +195,17 @@ optional `applicability_conditions[]`, `uncertainties[]`. Each procedure step:
 
 ## 8. Deterministic validation rules
 
-`validate.py`. Checks (all ERROR unless noted):
+`validate.py`. `SCHEMA_INVALID` is produced by validating `resp` against the
+loaded `schemas/scout_response.schema.json` itself, via
+`_jsonschema_lite.py` (a ~120-line dependency-free draft-07 subset validator —
+no `jsonschema` package is installed and installing one is denied). This
+enforces `minLength`/`minimum`/required-keys/`additionalProperties` exactly as
+the schema states, and cannot silently drift from it the way a hand-written
+duplicate of the rules did in round 1. Remaining checks (all ERROR unless
+noted):
 
-- `SCHEMA_INVALID` — shape / required keys / enum values.
+- `SCHEMA_INVALID` — shape / required keys / enum values / minLength / minimum
+  / additionalProperties, per the committed schema.
 - `UNKNOWN_EVIDENCE_ID` — id never issued this run.
 - `EVIDENCE_NOT_IN_RUN` — id not in this question's packet.
 - `DOC_ID_MISMATCH` — cited item's document_id disagrees with metadata or chunk.
@@ -220,7 +259,7 @@ any restricted run it is written only inside the restricted boundary (see
 ## 11. Synthetic tests and results
 
 `python -m unittest discover -s tests/standards_scout -p "test_*.py" -t .`
-→ **48 tests, all pass** (`.venv-noam` Python 3.14). Not wired into
+→ **72 tests, all pass** (`.venv-noam` Python 3.14). Not wired into
 `scripts/verify.sh` — Lab code stays out of the canonical path. Coverage:
 
 - ingestion preserves document/page/chunk identity; annex-prefixed clauses;

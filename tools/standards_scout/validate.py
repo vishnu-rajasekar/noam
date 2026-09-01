@@ -20,14 +20,16 @@ Failure codes:
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
+from . import _jsonschema_lite
 from .interfaces import UNKNOWN_CLAUSE, Chunk, DocumentMeta, EvidencePacket
 
-_STATUS = {"ANSWERED", "PARTIAL", "INSUFFICIENT_EVIDENCE"}
-_REQ_CLASS = {"EXPLICIT_REQUIREMENT", "INTERPRETATION", "DERIVED_PROCEDURE"}
-_STEP_CLASS = {"EXPLICIT", "DERIVED"}
+_SCHEMA_PATH = Path(__file__).parent / "schemas" / "scout_response.schema.json"
+_RESPONSE_SCHEMA = json.loads(_SCHEMA_PATH.read_text(encoding="utf-8"))
 
 # "EN 1999-1-1", "EN 1993", "ISO 12345", "clause 6.2.5", "§6.2", "table 6.1",
 # "equation (6.10)"
@@ -76,107 +78,18 @@ class ValidationReport:
         }
 
 
-def _is_str_list(value: object) -> bool:
-    return isinstance(value, list) and all(isinstance(x, str) for x in value)
-
-
 def _check_schema(resp: object, report: ValidationReport) -> bool:
-    """Fully validate the response shape and every nested value type BEFORE any
-    other code traverses model-produced data. Untrusted output must always end
-    up as a structured ``SCHEMA_INVALID`` result, never an exception."""
+    """Fully validate the response against the committed
+    ``schemas/scout_response.schema.json`` BEFORE any other code traverses
+    model-produced data, so this can never drift from what the schema actually
+    says. Untrusted output must always end up as a structured
+    ``SCHEMA_INVALID`` result, never an exception - ``_jsonschema_lite.validate``
+    never raises on ``resp``, only on a schema it can't interpret."""
 
-    ok = True
-
-    def bad(loc: str, msg: str) -> None:
-        nonlocal ok
-        ok = False
-        report.add("SCHEMA_INVALID", loc, msg)
-
-    if not isinstance(resp, dict):
-        bad("$", f"response is not an object (got {type(resp).__name__})")
-        return False
-
-    for key in (
-        "question_id",
-        "status",
-        "requirements",
-        "verification_procedure",
-        "missing_information",
-        "conflicts",
-    ):
-        if key not in resp:
-            bad("$", f"missing required key {key!r}")
-
-    if not isinstance(resp.get("question_id", ""), str):
-        bad("question_id", "not a string")
-    if resp.get("status") not in _STATUS:
-        bad("status", f"invalid status {resp.get('status')!r}")
-
-    # --- top-level collection types --------------------------------------------
-    for key in ("requirements", "verification_procedure", "missing_information", "conflicts"):
-        if key in resp and not isinstance(resp[key], list):
-            bad(key, f"not a list (got {type(resp[key]).__name__})")
-
-    if isinstance(resp.get("missing_information"), list):
-        for i, item in enumerate(resp["missing_information"]):
-            if not isinstance(item, str):
-                bad(f"missing_information[{i}]", "not a string")
-
-    # --- requirements --------------------------------------------------------
-    if isinstance(resp.get("requirements"), list):
-        for i, req in enumerate(resp["requirements"]):
-            loc = f"requirements[{i}]"
-            if not isinstance(req, dict):
-                bad(loc, f"not an object (got {type(req).__name__})")
-                continue
-            for key in ("claim_id", "claim", "classification"):
-                if key not in req:
-                    bad(loc, f"missing {key!r}")
-                elif not isinstance(req[key], str):
-                    bad(loc, f"{key!r} not a string")
-            if req.get("classification") not in _REQ_CLASS:
-                bad(loc, f"invalid classification {req.get('classification')!r}")
-            if "evidence_ids" not in req:
-                bad(loc, "missing 'evidence_ids'")
-            elif not _is_str_list(req["evidence_ids"]):
-                bad(loc, "evidence_ids not a list of strings")
-            for key in ("applicability_conditions", "uncertainties"):
-                if key in req and not _is_str_list(req[key]):
-                    bad(loc, f"{key!r} not a list of strings")
-
-    # --- verification_procedure -------------------------------------------------
-    if isinstance(resp.get("verification_procedure"), list):
-        for i, step in enumerate(resp["verification_procedure"]):
-            loc = f"verification_procedure[{i}]"
-            if not isinstance(step, dict):
-                bad(loc, f"not an object (got {type(step).__name__})")
-                continue
-            if not isinstance(step.get("step"), int) or isinstance(step.get("step"), bool):
-                bad(loc, "'step' not an integer")
-            if not isinstance(step.get("action", ""), str):
-                bad(loc, "'action' not a string")
-            if "action" not in step:
-                bad(loc, "missing 'action'")
-            if step.get("classification") not in _STEP_CLASS:
-                bad(loc, f"invalid classification {step.get('classification')!r}")
-            if "evidence_ids" not in step:
-                bad(loc, "missing 'evidence_ids'")
-            elif not _is_str_list(step["evidence_ids"]):
-                bad(loc, "evidence_ids not a list of strings")
-
-    # --- conflicts ----------------------------------------------------------
-    if isinstance(resp.get("conflicts"), list):
-        for i, conf in enumerate(resp["conflicts"]):
-            loc = f"conflicts[{i}]"
-            if not isinstance(conf, dict):
-                bad(loc, f"not an object (got {type(conf).__name__})")
-                continue
-            if not isinstance(conf.get("description", ""), str):
-                bad(loc, "'description' not a string")
-            if "evidence_ids" in conf and not _is_str_list(conf["evidence_ids"]):
-                bad(loc, "evidence_ids not a list of strings")
-
-    return ok
+    errors = _jsonschema_lite.validate(resp, _RESPONSE_SCHEMA)
+    for path, msg in errors:
+        report.add("SCHEMA_INVALID", path, msg)
+    return not errors
 
 
 def _iter_cited(resp: dict):

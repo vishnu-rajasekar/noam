@@ -194,6 +194,69 @@ class TestMalformedResponsesNeverRaise(unittest.TestCase):
         resp["verification_procedure"][0]["step"] = "one"
         self._run(resp)
 
+    # --- gaps found by Codex review round 2: minLength/minimum/required/
+    # additionalProperties were not actually enforced -------------------------
+
+    def test_empty_question_id_rejected(self) -> None:
+        resp = _good_response()
+        resp["question_id"] = ""
+        self._run(resp)
+
+    def test_empty_claim_id_rejected(self) -> None:
+        resp = _good_response()
+        resp["requirements"][0]["claim_id"] = ""
+        self._run(resp)
+
+    def test_empty_claim_text_rejected(self) -> None:
+        resp = _good_response()
+        resp["requirements"][0]["claim"] = ""
+        self._run(resp)
+
+    def test_step_zero_rejected(self) -> None:
+        resp = _good_response()
+        resp["verification_procedure"][0]["step"] = 0
+        self._run(resp)
+
+    def test_negative_step_rejected(self) -> None:
+        resp = _good_response()
+        resp["verification_procedure"][0]["step"] = -1
+        self._run(resp)
+
+    def test_conflict_missing_required_keys_rejected(self) -> None:
+        resp = _good_response()
+        resp["conflicts"] = [{}]
+        self._run(resp)
+
+    def test_conflict_empty_description_rejected(self) -> None:
+        resp = _good_response()
+        resp["conflicts"] = [{"description": "", "evidence_ids": ["E002"]}]
+        self._run(resp)
+
+    def test_top_level_unknown_property_rejected(self) -> None:
+        resp = _good_response()
+        resp["extra_field_the_model_invented"] = "surprise"
+        self._run(resp)
+
+    def test_requirement_unknown_property_rejected(self) -> None:
+        resp = _good_response()
+        resp["requirements"][0]["confidence"] = 0.9  # not in the schema
+        self._run(resp)
+
+    def test_combined_invalid_response_is_never_reported_ok(self) -> None:
+        # The exact shape the round-2 review showed passing as {'ok': True}.
+        resp = {
+            "question_id": "",
+            "status": "ANSWERED",
+            "requirements": [],
+            "verification_procedure": [{"step": 0, "action": "x", "evidence_ids": [],
+                                        "classification": "EXPLICIT"}],
+            "missing_information": [],
+            "conflicts": [{}],
+        }
+        rep = self._run(resp)
+        self.assertFalse(rep.ok)
+        self.assertGreaterEqual(len(rep.findings), 3)
+
     def test_downstream_scoring_survives_malformed_response(self) -> None:
         from tools.standards_scout.evaluate import score_question
         from tools.standards_scout.report import render_question_report
