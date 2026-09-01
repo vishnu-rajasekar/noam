@@ -1,0 +1,27 @@
+{
+  "question_id": "SYN-005",
+  "status": "PARTIAL",
+  "requirements": [
+    {
+      "claim_id": "C001",
+      "claim": "The supplied evidence does not support the sealant bite figure asserted in the question. SSGC:2024 clause 6.2 requires the structural sealant bite to be not less than 6 mm and not less than the value from b_s = W_k * a / (2 * sigma_des), and not greater than three times the glue line thickness.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E002"],
+      "applicability_conditions": [],
+      "uncertainties": []
+    },
+    {
+      "claim_id": "C002",
+      "claim": "For projects in Region Q the National Annex clause NA.6.2 raises the minimum structural sealant bite to 8 mm.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E003"],
+      "applicability_conditions": ["Applies because the project is stated to be in Region Q."],
+      "uncertainties": []
+    }
+  ],
+  "verification_procedure": [],
+  "missing_information": [
+    "The specific sealant bite value asserted in the question is not stated in any supplied evidence item; the premise of the question cannot be confirmed."
+  ],
+  "conflicts": []
+}

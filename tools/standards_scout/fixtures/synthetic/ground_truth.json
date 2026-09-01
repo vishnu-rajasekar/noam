@@ -1,0 +1,84 @@
+{
+  "_comment": "Synthetic ground truth for harness tests only. Invented values, not engineering guidance. The real Airport set lives under the gitignored restricted tree and is populated by the engineer.",
+  "dataset_version": "synthetic-2024.1",
+  "questions": [
+    {
+      "question_id": "SYN-001",
+      "question": "For a mullion on the Terminal Q unitised curtain wall, what lateral deflection limit under serviceability wind action must the design satisfy?",
+      "project_context": "Project \"Terminal Q\", Region Q. Facade governed by project specification SYN-SPEC-A Rev C read together with SSGC:2024 and the Region Q National Annex.",
+      "answerability": { "answerable": true },
+      "expected_evidence": {
+        "documents": ["SYN-SSGC-2024", "SYN-SPEC-A"],
+        "clauses": [
+          { "document_id": "SYN-SSGC-2024", "clause": "5.2" },
+          { "document_id": "SYN-SPEC-A", "clause": "3.1" }
+        ]
+      },
+      "expected_concepts": ["span/250", "15 mm", "takes precedence"],
+      "unacceptable_claims": ["span/175 governs", "19 mm is the project limit"],
+      "expected_status": ["ANSWERED", "PARTIAL"],
+      "engineer_notes": "SYN-SPEC-A 3.1 is more onerous than SSGC 5.2 and governs. A correct answer must surface the project override, not just quote the code value."
+    },
+    {
+      "question_id": "SYN-002",
+      "question": "What ultimate limit state wind action combination factor applies to the Terminal Q curtain wall, and where does it come from?",
+      "project_context": "Project \"Terminal Q\" is located in Region Q. Use SSGC:2024 with the Region Q National Annex SYN-NA.",
+      "answerability": { "answerable": true },
+      "expected_evidence": {
+        "documents": ["SYN-SSGC-2024", "SYN-NA-2024"],
+        "clauses": [
+          { "document_id": "SYN-SSGC-2024", "clause": "4.3" },
+          { "document_id": "SYN-NA-2024", "clause": "NA.4.3" }
+        ]
+      },
+      "expected_concepts": ["1.5", "National Annex", "Region Q"],
+      "unacceptable_claims": ["1.4 is the governing ULS value"],
+      "expected_status": ["ANSWERED", "PARTIAL"],
+      "stability_probe": true,
+      "engineer_notes": "The National Annex replaces the recommended 1.4 with 1.5 for Region Q. A correct answer must cite both the base clause and the NA override."
+    },
+    {
+      "question_id": "SYN-003",
+      "question": "State the minimum structural sealant bite requirement and the bite formula for a Region Q project under SSGC:2024.",
+      "project_context": "Project \"Terminal Q\", Region Q.",
+      "answerability": { "answerable": true },
+      "expected_evidence": {
+        "documents": ["SYN-SSGC-2024", "SYN-NA-2024"],
+        "clauses": [
+          { "document_id": "SYN-SSGC-2024", "clause": "6.2" },
+          { "document_id": "SYN-NA-2024", "clause": "NA.6.2" }
+        ]
+      },
+      "expected_concepts": ["8 mm", "shorter supported edge", "design tensile stress"],
+      "expected_formula": "b_s = W_k * a / (2 * sigma_des)",
+      "unacceptable_claims": ["6 mm is the Region Q minimum"],
+      "expected_status": ["ANSWERED", "PARTIAL"],
+      "engineer_notes": "Base minimum 6 mm, raised to 8 mm by SYN-NA NA.6.2 for Region Q; formula unchanged. Formula must be reproduced, not paraphrased away."
+    },
+    {
+      "question_id": "SYN-004",
+      "question": "What seismic detailing requirements does the curtain wall design have to satisfy for Terminal Q?",
+      "project_context": "Project \"Terminal Q\", Region Q.",
+      "answerability": { "answerable": false },
+      "expected_evidence": { "documents": [], "clauses": [] },
+      "expected_concepts": [],
+      "unacceptable_claims": ["SSGC:2024 clause", "National Annex requires"],
+      "expected_status": ["INSUFFICIENT_EVIDENCE"],
+      "engineer_notes": "Negative control. SYN-SPEC-A 9 explicitly places seismic design outside the issued documents; no supplied document states a seismic requirement. The model must abstain, not manufacture a clause."
+    },
+    {
+      "question_id": "SYN-005",
+      "question": "Confirm that SSGC:2024 requires a 30 mm structural sealant bite for unitised curtain wall panes.",
+      "project_context": "Project \"Terminal Q\", Region Q.",
+      "answerability": { "answerable": true },
+      "expected_evidence": {
+        "documents": ["SYN-SSGC-2024"],
+        "clauses": [ { "document_id": "SYN-SSGC-2024", "clause": "6.2" } ]
+      },
+      "expected_concepts": ["not less than 6 mm", "not stated"],
+      "unacceptable_claims": ["30 mm", "requires a 30 mm structural sealant bite"],
+      "expected_status": ["ANSWERED", "PARTIAL"],
+      "engineer_notes": "Trick question. The 30 mm figure is not in any supplied evidence. A correct answer rejects the false premise and states the actual rule (>= 6 mm, or >= 8 mm in Region Q) or returns PARTIAL; it must not affirm 30 mm."
+    }
+  ]
+}

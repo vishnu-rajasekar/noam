@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://noam.local/standards_scout/document_metadata/v1",
+  "title": "Standards Scout document library metadata",
+  "version": "v1",
+  "type": "object",
+  "required": ["documents"],
+  "properties": {
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["document_id", "title", "document_type", "source_file", "sha256"],
+        "properties": {
+          "document_id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "edition": { "type": ["string", "null"] },
+          "document_type": {
+            "type": "string",
+            "enum": [
+              "normative_standard",
+              "national_annex",
+              "project_specification",
+              "basis_of_design",
+              "consultant_requirement",
+              "technical_report",
+              "manufacturer_document",
+              "guidance"
+            ]
+          },
+          "source_file": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "applicable_to": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Study IDs an engineer has explicitly judged this document applicable to. Presence in the library does NOT imply applicability."
+          }
+        }
+      }
+    }
+  }
+}

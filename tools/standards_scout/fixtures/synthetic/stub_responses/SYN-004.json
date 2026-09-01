@@ -1,0 +1,12 @@
+{
+  "question_id": "SYN-004",
+  "status": "INSUFFICIENT_EVIDENCE",
+  "requirements": [],
+  "verification_procedure": [],
+  "missing_information": [
+    "No supplied evidence states a seismic detailing requirement for the curtain wall.",
+    "SYN-SPEC-A clause 9 places seismic design outside the documents issued at this revision and refers to separate project documents that are not supplied.",
+    "Any seismic design basis, seismic hazard level, or governing seismic standard for Terminal Q would have to come from those separate documents."
+  ],
+  "conflicts": []
+}

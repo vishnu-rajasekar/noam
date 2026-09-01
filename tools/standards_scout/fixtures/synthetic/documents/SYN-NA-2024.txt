@@ -1,0 +1,22 @@
+Synthetic National Annex SYN-NA to SSGC:2024
+(Fully invented non-proprietary fixture text. Not a real national annex.)
+
+NA.1 Scope
+This synthetic National Annex records nationally determined parameters for the
+fictional territory "Region Q" for use with the Synthetic Structural Glazing
+Code SSGC:2024. It is test data only.
+
+NA.4.3 Wind action combination factor
+For projects in Region Q the wind action combination factor of SSGC:2024
+clause 4.3 shall be taken as psi_w = 1.5 for the ultimate limit state, in
+place of the recommended value 1.4. For serviceability verification the
+combination factor shall be taken as psi_w,ser = 1.0.
+
+NA.5.2 Mullion and transom deflection limit
+The absolute deflection cap of SSGC:2024 clause 5.2 is retained at 19 mm for
+Region Q. No relaxation of the span/175 limit is permitted.
+
+NA.6.2 Minimum structural sealant bite
+For Region Q the minimum structural sealant bite of SSGC:2024 clause 6.2 shall
+be not less than 8 mm, in place of 6 mm. The formula in clause 6.2 is
+otherwise unchanged.

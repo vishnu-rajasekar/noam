@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://noam.local/standards_scout/ground_truth/v1",
+  "title": "Standards Scout ground-truth evaluation set",
+  "version": "v1",
+  "type": "object",
+  "required": ["dataset_version", "questions"],
+  "properties": {
+    "dataset_version": { "type": "string", "minLength": 1 },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question_id", "question", "answerability", "expected_status"],
+        "properties": {
+          "question_id": { "type": "string", "minLength": 1 },
+          "question": { "type": "string", "minLength": 1 },
+          "project_context": { "type": "string" },
+          "answerability": {
+            "type": "object",
+            "required": ["answerable"],
+            "properties": { "answerable": { "type": "boolean" } }
+          },
+          "expected_evidence": {
+            "type": "object",
+            "properties": {
+              "documents": { "type": "array", "items": { "type": "string" } },
+              "clauses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["document_id", "clause"],
+                  "properties": {
+                    "document_id": { "type": "string" },
+                    "clause": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "expected_concepts": { "type": "array", "items": { "type": "string" } },
+          "unacceptable_claims": { "type": "array", "items": { "type": "string" } },
+          "expected_formula": { "type": ["string", "null"] },
+          "expected_status": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["ANSWERED", "PARTIAL", "INSUFFICIENT_EVIDENCE"] },
+            "minItems": 1
+          },
+          "stability_probe": { "type": "boolean", "default": false },
+          "engineer_notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_comment": "Synthetic, non-proprietary document library for the Standards Scout tests. Every file here is invented fixture text. Real standards / project documents live under the gitignored restricted tree and are never committed.",
+  "documents": [
+    {
+      "document_id": "SYN-SSGC-2024",
+      "title": "Synthetic Structural Glazing Code",
+      "edition": "2024",
+      "document_type": "normative_standard",
+      "source_file": "SYN-SSGC-2024.txt",
+      "sha256": "f553ddef4c540c6d82ba6c31947bc8cc7e5229374033fe3ab6f46bb2dc6b2fc9",
+      "applicable_to": []
+    },
+    {
+      "document_id": "SYN-NA-2024",
+      "title": "Synthetic National Annex (Region Q) to SSGC:2024",
+      "edition": "2024",
+      "document_type": "national_annex",
+      "source_file": "SYN-NA-2024.txt",
+      "sha256": "153a4ef2344f4566b528716b21d9e2dc178ff1f2476a11465f2af4932064b979",
+      "applicable_to": []
+    },
+    {
+      "document_id": "SYN-SPEC-A",
+      "title": "Synthetic Project Specification - Terminal Q facade, Rev C",
+      "edition": "Rev C",
+      "document_type": "project_specification",
+      "source_file": "SYN-SPEC-A.txt",
+      "sha256": "60526f461d3fa4bb7f3f3c8dabd08f673a16254457fd6336cf2331727ba2e18f",
+      "applicable_to": []
+    }
+  ]
+}

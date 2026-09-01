@@ -1,0 +1,45 @@
+{
+  "question_id": "SYN-001",
+  "status": "ANSWERED",
+  "requirements": [
+    {
+      "claim_id": "C001",
+      "claim": "Project specification SYN-SPEC-A clause 3.1 limits the lateral deflection of any mullion under the serviceability wind action to span/250 and to 15 mm absolute, whichever is smaller, and states that this requirement takes precedence over the general code limit.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E002"],
+      "applicability_conditions": ["Applies to the Terminal Q project because SYN-SPEC-A Rev C is the governing project specification stated in the question context."],
+      "uncertainties": []
+    },
+    {
+      "claim_id": "C002",
+      "claim": "The general framing serviceability limit in SSGC:2024 clause 5.2 is span/175 and 19 mm absolute, whichever is smaller, with span/250 for members supporting a corner or movement joint.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E001"],
+      "applicability_conditions": [],
+      "uncertainties": []
+    }
+  ],
+  "verification_procedure": [
+    {
+      "step": 1,
+      "action": "Establish the mullion span between structural supports and compute the serviceability wind action on the mullion.",
+      "evidence_ids": ["E002"],
+      "classification": "DERIVED"
+    },
+    {
+      "step": 2,
+      "action": "Check that the computed lateral deflection does not exceed span/250 and does not exceed 15 mm absolute, applying the more onerous project limit from SYN-SPEC-A clause 3.1 rather than the SSGC:2024 clause 5.2 value.",
+      "evidence_ids": ["E002", "E001"],
+      "classification": "EXPLICIT"
+    }
+  ],
+  "missing_information": [
+    "The serviceability wind pressure for the Terminal Q location is not in the supplied evidence and must be taken from the project loading documents."
+  ],
+  "conflicts": [
+    {
+      "description": "SSGC:2024 clause 5.2 (span/175, 19 mm) and SYN-SPEC-A clause 3.1 (span/250, 15 mm) give different limits; SYN-SPEC-A clause 3.1 states it takes precedence, so the project value governs.",
+      "evidence_ids": ["E001", "E002"]
+    }
+  ]
+}

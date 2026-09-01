@@ -1,0 +1,43 @@
+{
+  "question_id": "SYN-002",
+  "status": "ANSWERED",
+  "requirements": [
+    {
+      "claim_id": "C001",
+      "claim": "SSGC:2024 clause 4.3 sets the ultimate limit state wind action combination factor at a recommended psi_w = 1.4, applied to both pressure and suction, unless a National Annex specifies a different value for the project location.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E001"],
+      "applicability_conditions": [],
+      "uncertainties": []
+    },
+    {
+      "claim_id": "C002",
+      "claim": "For projects in Region Q the National Annex clause NA.4.3 replaces the recommended value and requires psi_w = 1.5 for the ultimate limit state; the Terminal Q project is stated to be in Region Q, so psi_w = 1.5 governs.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E002"],
+      "applicability_conditions": ["The National Annex value applies only because the question context places the project in Region Q."],
+      "uncertainties": []
+    }
+  ],
+  "verification_procedure": [
+    {
+      "step": 1,
+      "action": "Confirm the project location is within Region Q so that the National Annex clause NA.4.3 applies.",
+      "evidence_ids": ["E002"],
+      "classification": "EXPLICIT"
+    },
+    {
+      "step": 2,
+      "action": "Apply psi_w = 1.5 to the characteristic wind action for ultimate limit state load combinations on the curtain wall framing.",
+      "evidence_ids": ["E001", "E002"],
+      "classification": "EXPLICIT"
+    }
+  ],
+  "missing_information": [],
+  "conflicts": [
+    {
+      "description": "SSGC:2024 clause 4.3 recommends psi_w = 1.4 while National Annex clause NA.4.3 requires psi_w = 1.5 for Region Q. The National Annex value governs for this project.",
+      "evidence_ids": ["E001", "E002"]
+    }
+  ]
+}

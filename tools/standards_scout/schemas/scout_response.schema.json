@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://noam.local/standards_scout/scout_response/v1",
+  "title": "Standards Scout structured response",
+  "version": "v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question_id", "status", "requirements", "verification_procedure", "missing_information", "conflicts"],
+  "properties": {
+    "question_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["ANSWERED", "PARTIAL", "INSUFFICIENT_EVIDENCE"] },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "claim", "classification", "evidence_ids"],
+        "properties": {
+          "claim_id": { "type": "string", "minLength": 1 },
+          "claim": { "type": "string", "minLength": 1 },
+          "classification": {
+            "type": "string",
+            "enum": ["EXPLICIT_REQUIREMENT", "INTERPRETATION", "DERIVED_PROCEDURE"]
+          },
+          "evidence_ids": { "type": "array", "items": { "type": "string" } },
+          "applicability_conditions": { "type": "array", "items": { "type": "string" } },
+          "uncertainties": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "verification_procedure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["step", "action", "evidence_ids", "classification"],
+        "properties": {
+          "step": { "type": "integer", "minimum": 1 },
+          "action": { "type": "string", "minLength": 1 },
+          "evidence_ids": { "type": "array", "items": { "type": "string" } },
+          "classification": { "type": "string", "enum": ["EXPLICIT", "DERIVED"] }
+        }
+      }
+    },
+    "missing_information": { "type": "array", "items": { "type": "string" } },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "evidence_ids"],
+        "properties": {
+          "description": { "type": "string", "minLength": 1 },
+          "evidence_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

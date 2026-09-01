@@ -1,0 +1,48 @@
+Synthetic Structural Glazing Code SSGC:2024
+(Fully invented non-proprietary fixture text. Not a real standard.)
+
+1 Scope
+This synthetic code gives fictional rules for unitised curtain wall framing
+used only to test the Standards Scout harness. No value here is an engineering
+requirement.
+
+4 Actions and combinations
+
+4.3 Wind action combination factor
+The characteristic wind action W_k shall be multiplied by the combination
+factor psi_w = 1.4 for the ultimate limit state, unless a National Annex
+specifies a different value for the project location. The combination factor
+applies to both positive and negative (suction) wind pressure.
+
+4.6 Dead load of infill panels
+The self weight of glass and opaque infill panels shall be taken as an
+unfactored characteristic action G_k determined from the declared panel
+build-up. A default areal weight of 0.30 kN/m2 per 6 mm glass ply may be
+assumed when a project value is not declared.
+
+5 Serviceability of framing members
+
+5.2 Mullion and transom deflection limit
+Under the serviceability wind action, the maximum lateral deflection of a
+mullion or transom spanning between structural supports shall not exceed
+span/175, and shall not exceed 19 mm in absolute terms, whichever is smaller.
+For members supporting a corner or movement joint, the deflection under
+serviceability wind action shall not exceed span/250.
+
+5.4 Deflection under combined thermal and wind action
+Where thermal bow is combined with serviceability wind action, the combined
+lateral deflection shall not exceed span/150.
+
+6 Structural sealant joints
+
+6.2 Minimum structural sealant bite
+The structural sealant bite dimension b_s shall be not less than 6 mm and not
+less than the value obtained from b_s = W_k * a / (2 * sigma_des), where a is
+the shorter supported edge length of the pane and sigma_des is the design
+tensile stress of the sealant declared by the manufacturer. The bite dimension
+shall additionally never be taken greater than three times the sealant glue
+line thickness.
+
+6.5 Sealant glue line thickness
+The structural sealant glue line thickness shall be not less than 6 mm for
+two-side supported panes and not less than 8 mm for four-side supported panes.

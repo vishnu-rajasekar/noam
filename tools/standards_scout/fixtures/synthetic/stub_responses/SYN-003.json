@@ -1,0 +1,46 @@
+{
+  "question_id": "SYN-003",
+  "status": "ANSWERED",
+  "requirements": [
+    {
+      "claim_id": "C001",
+      "claim": "SSGC:2024 clause 6.2 requires the structural sealant bite b_s to be not less than 6 mm and not less than b_s = W_k * a / (2 * sigma_des), where a is the shorter supported edge length of the pane and sigma_des is the manufacturer's declared design tensile stress; b_s is also capped at three times the sealant glue line thickness.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E002"],
+      "applicability_conditions": [],
+      "uncertainties": ["sigma_des is a manufacturer-declared value and is not in the supplied evidence."]
+    },
+    {
+      "claim_id": "C002",
+      "claim": "For projects in Region Q the National Annex clause NA.6.2 raises the minimum structural sealant bite from 6 mm to 8 mm; the bite formula in clause 6.2 is otherwise unchanged.",
+      "classification": "EXPLICIT_REQUIREMENT",
+      "evidence_ids": ["E001"],
+      "applicability_conditions": ["Applies because the project is stated to be in Region Q."],
+      "uncertainties": []
+    }
+  ],
+  "verification_procedure": [
+    {
+      "step": 1,
+      "action": "Obtain the shorter supported edge length a of the pane and the manufacturer's declared design tensile stress sigma_des for the structural sealant.",
+      "evidence_ids": ["E002"],
+      "classification": "EXPLICIT"
+    },
+    {
+      "step": 2,
+      "action": "Compute b_s = W_k * a / (2 * sigma_des) using the characteristic wind action W_k on the pane.",
+      "evidence_ids": ["E002"],
+      "classification": "EXPLICIT"
+    },
+    {
+      "step": 3,
+      "action": "Take the design structural sealant bite as the greater of the formula value and 8 mm (the Region Q minimum), and confirm it does not exceed three times the glue line thickness.",
+      "evidence_ids": ["E002", "E001"],
+      "classification": "EXPLICIT"
+    }
+  ],
+  "missing_information": [
+    "The characteristic wind action W_k on the pane and the sealant design tensile stress sigma_des are not in the supplied evidence."
+  ],
+  "conflicts": []
+}

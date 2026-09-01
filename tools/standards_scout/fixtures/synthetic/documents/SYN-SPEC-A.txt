@@ -1,0 +1,25 @@
+Synthetic Project Specification SYN-SPEC-A, Rev C
+Fictional "Terminal Q" unitised curtain wall - facade performance spec
+(Fully invented non-proprietary fixture text. Not a real project document.)
+
+3 Framing performance
+
+3.1 Mullion deflection
+The Contractor shall limit the lateral deflection of any mullion under the
+serviceability wind action to span/250 and to 15 mm absolute, whichever is
+smaller. This requirement is more onerous than SSGC:2024 clause 5.2 and takes
+precedence for this project.
+
+3.4 Movement joints
+Stack joint accommodation shall provide not less than 25 mm of vertical
+movement per floor without loss of air or water performance.
+
+7 Basis of design references
+This specification is to be read with SSGC:2024 and the Region Q National
+Annex SYN-NA. Where documents conflict, the most onerous provision governs
+unless the Engineer directs otherwise in writing.
+
+9 Items explicitly outside this specification
+Seismic design, blast enhancement, and fire-rated curtain wall zones are not
+covered by this specification and are subject to separate project documents
+not issued at this revision.
