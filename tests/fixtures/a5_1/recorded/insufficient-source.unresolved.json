@@ -1,0 +1,1 @@
+{"backend_id":"recorded-fixture","contract_version":"a5.1.0","items":[{"affected":"source:insufficient-source","human_action":"A human must supply the missing source information; the backend will not infer it.","reason_code":"missing_required_source_info"}],"ok":false}

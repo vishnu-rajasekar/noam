@@ -52,9 +52,23 @@ case "$MODE" in
         echo "== archived Task 0 spike test suite (rejected; historical only) =="
         "$PYTHON" -m pytest archive/experiments/task0_energy/tests -v
         ;;
-    integration|release)
-        echo "verify.sh: --$MODE is not yet implemented (see ROADMAP.md Phase B" >&2
-        echo "onward for what introduces --integration and --release scope)." >&2
+    integration)
+        # A5.1 recorded-fixture proposal-intake gate (ROADMAP.md Phase A.5).
+        # Same interpreter rule and same pytest/unittest fallback as --fast.
+        if ! PYTHON="$(noam_require_python "$REPO_ROOT")"; then
+            echo "verify.sh: cannot run the --integration suite (see message above)." >&2
+            exit 1
+        fi
+        echo "== A5.1 recorded-fixture proposal-intake suite (using $PYTHON) =="
+        if "$PYTHON" -c "import pytest" >/dev/null 2>&1; then
+            "$PYTHON" -m pytest tests/a5_1 -v
+        else
+            "$PYTHON" -m unittest discover -s tests/a5_1 -p "test_*.py" -v
+        fi
+        ;;
+    release)
+        echo "verify.sh: --release is not yet implemented (see ROADMAP.md Phase B" >&2
+        echo "onward for what introduces --release scope)." >&2
         exit 2
         ;;
     *)

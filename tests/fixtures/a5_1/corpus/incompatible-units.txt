@@ -1,0 +1,4 @@
+Synthetic spec fragment containing irreconcilable units.
+The panel span is given as both 3.0 metres and 18 feet in the same sentence.
+No reconciliation, correction, or governing value is provided anywhere in the note.
+This document is purpose-written synthetic test material with no real project data.
